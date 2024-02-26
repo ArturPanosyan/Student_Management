@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="body_lessons">
+<th:block th:include="/fragment/headerFragment::userInfo"></th:block>
+
+<span>
+    <a th:if="${currentUser != null and currentUser.userRole.name() == 'STUDENT'}" href="/user/profile">My Profile</a>
+    <a th:if="${currentUser != null and currentUser.userRole.name() == 'TEACHER'}" href="/my/students">My Student</a>
+</span>
+<table>
+    <tbody th:unless="${usersByRole != null and not  #lists.isEmpty(usersByType)}">
+    <tr>
+        <td colspan="8">No users found</td>
+    </tr>
+    </tbody>
+    <thead>
+    <tr>
+        <th>User Id</th>
+        <th>Picture</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Lessons</th>
+        <th>User Role</th>
+    </tr>
+    </thead>
+    <tbody th:if="${usersByRole != null and not #lists.isEmpty(usersByRole)}">
+    <tr th:each="user : ${usersByRole}">
+        <th th:text="${user.id}"></th>
+        <th> <img th:if="${user.getPicName() != null}" th:src="@{/getImage(picName=${user.picName})}" width="40"/>
+            <img th:if="${user.getPicName() == null}" src="/defaultImgs/user.png" width="20"/>
+        </th>
+        <th th:text="${user.name}"></th>
+        <th th:text="${user.email}"></th>
+        <th>
+            <span th:text="${user.getLessonListAsStudent().size()}"></span>
+        </th>
+        <th th:text="${user.userRole}"></th>
+    </tr>
+    </tbody>
+</table>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+</body>
+</html>

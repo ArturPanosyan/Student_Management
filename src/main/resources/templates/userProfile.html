@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:title="${currentUser.name}"></title>
+</head>
+<body>
+<th:block th:include="/fragment/headerFragment::userInfo"></th:block>
+<div>
+    <img th:if="${currentUser.getPicName() != null}" th:src="@{/getImage(picName=${currentUser.picName})}" width="100"/>
+    <img th:if="${currentUser.getPicName() == null}" src="/defaultImgs/user.png" width="40"/>
+    <h1 th:text="${currentUser.name}"></h1>
+    <a th:href="@{'/update/user/page/' + ${currentUser.id}}">Update Profile</a>
+</div>
+<div>
+    <table>
+        <tr>
+            <th th:text="${currentUser.email}"></th>
+            <th th:text="${currentUser.userType}"></th>
+        </tr>
+    </table>
+</div>
+<div>
+    <h1>My Lessons</h1>
+    <table th:if="${currentUser.userType.name() == 'TEACHER'}">
+        <tr th:each="lesson : ${currentUser.lessonListAsTeacher}">
+            <th th:if="${lesson == null}">No Actual Lessons</th>
+            <th th:if="${lesson != null}" th:text="${lesson.title}"></th>
+            <th th:if="${lesson != null}" th:date="${lesson.startDate}"></th>
+        </tr>
+    </table>
+    <table th:if="${currentUser.userRole.name() == 'STUDENT'}">
+        <tr th:each="lesson : ${currentUser.lessonListAsStudent}">
+            <th th:if="${lesson == null}">No Actual Lessons</th>
+            <th th:if="${lesson != null}" th:text="${lesson.title}"></th>
+            <th th:if="${lesson != null}" th:text="${lesson.startDate}"></th>
+            <th th:if="${lesson != null}" th:value="${lesson.id}">
+                <a th:href="@{'/classmates/' + ${lesson.id}}">classmates</a>
+            </th>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link rel="stylesheet" href="/css/chat.css">
+</head>
+<body>
+<div th:each="receiveMessage : ${receiveMessages}">
+    <div th:if="${receiveMessage.toUser.id == fromUser.id && receiveMessage.fromUser.id == toUser.id}">
+        <p th:text="${receiveMessage.message}"></p>
+        <p th:text="${receiveMessage.localDateTime}"></p>
+        <p th:text="${receiveMessage.fromUser.name}"></p>
+    </div>
+</div>
+<div th:each="sendMessage : ${sendMessages}">
+    <div th:if="${sendMessage.fromUser.id == fromUser.id && sendMessage.toUser.id == toUser.id}">
+        <p th:text="${sendMessage.message}"></p>
+        <p th:text="${sendMessage.localDateTime}"></p>
+        <p th:text="${sendMessage.fromUser.name}"></p>
+    </div>
+</div>
+<footer>
+    <form action="/send" method="post">
+        <input type="hidden" name="fromUser.id" th:value="${fromUser.id}">
+        <input type="hidden" name="toUser.id" th:value="${toUser.id}">
+        <label>
+            <input type="text" name="sendMessage" placeholder="Type your message...">
+        </label>
+        <input type="submit" value="send">
+    </form>
+</footer>
+</body>
+</html>
